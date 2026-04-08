@@ -1,11 +1,13 @@
 
 import React from "react";
-import { toggleMenu } from "../utils/appSlice";
+import { useDispatch } from "react-redux";
 
 const Head = () => {
     const dispatch = useDispatch();
 
-    const toggleMenuHandler = () => {};
+    const toggleMenuHandler = () => {
+        dispatch(toggleMenu());
+    };
     return(
         <div className="grid grid-flow-col p-4 m-2 shadow-lg">
             
