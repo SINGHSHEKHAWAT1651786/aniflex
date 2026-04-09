@@ -9,16 +9,18 @@ const Head = () => {
         dispatch(toggleMenu());
     };
     return(
-        <div className="grid grid-flow-col p-4 m-2 shadow-lg">
+        <div className="grid grid-flow-col p-4 m-2 shadow-lg cursor-pointer">
             
             <div className="flex col-span-1">
                 <i onClick={() => toggleMenuHandler} 
                 className="fa-solid fa-bars text-2xl"></i>
+                <a href="/">
                 <img 
                     alt='logo' 
                     className="w-10 h-8 mx-2"
                     src='C:\Users\dell\Desktop\Aniflex\aniflex\public\logo192.png'
                 />
+                </a>
             </div>
        
             <div className="col-span-10 px-10">
