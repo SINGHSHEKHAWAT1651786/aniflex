@@ -1,6 +1,7 @@
 
 import React from "react";
 import { useDispatch } from "react-redux";
+import { toggleMenu } from "../utils/appSlice";
 
 const Head = () => {
     const dispatch = useDispatch();
@@ -12,7 +13,7 @@ const Head = () => {
         <div className="grid grid-flow-col p-4 m-2 shadow-lg cursor-pointer">
             
             <div className="flex col-span-1">
-                <i onClick={() => toggleMenuHandler} 
+                <i onClick={() => toggleMenuHandler()} 
                 className="fa-solid fa-bars text-2xl"></i>
                 <a href="/">
                 <img 
