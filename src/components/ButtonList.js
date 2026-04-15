@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "./Button";
-const list = ["All", "Live", "Gaming, South, Cartoon, 18+, Hollywood, South, Cartoon, Music"];
+//const list = ["All", "Live", "Gaming, South, Cartoon, 18+, Hollywood, South, Cartoon, Music"];
 const ButtonList = () => {
     return (
         <div className="flex">
