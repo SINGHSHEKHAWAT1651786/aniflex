@@ -14,10 +14,19 @@ const VideoCard = ({ info }) => {
             <ul>
                 <li className="font-bol py-2">{title}</li>
                 <li>{channelTitle}</li>
-                <li>{statistics.viewCount} views</li>
+                <li>{viewCount} views</li>
             </ul>
         </div>
     );
 };
+//Higher Order function
+export const AdVideoCard = ({ info }) => {
+    return (
+<div className="p-1 m-1 border border-grey-600"><VideoCard info={info}/></div>
+    )
+    
+    
+};
+
 
 export default VideoCard;
