@@ -12,9 +12,26 @@ console.log(searchQuery);
 //make an apis call after key press
 // but if the difference between 2 APIs call <200ms 
 //decline the APIs call
-       setTimeout(()=>getSearchSuggestions(), 200) ;
+   const timer = setTimeout(()=>getSearchSuggestions(), 200);
+       return () => {
+clearTimeout(timer);
+       };
     }, [searchQuery]);
+
+    /** 
+     * key -i
+     * - render the component
+     * - useEffect();
+     * - start timer => make apis call after 200ms
+     *   
+     * key-ip
+     * -destory the component, also call return useffect
+     * - re-render the component
+     * - useEffect();
+     * - start timer => new timer => make apis call after 200ms 
+    */
     const getSearchSuggestions = async () => {
+        console.log(searchQuery);
         const data = await fetch(YOUTUBE_SEARCH_API + searchQuery);
         const json = await data.json();
         console.log(json[1]); 
