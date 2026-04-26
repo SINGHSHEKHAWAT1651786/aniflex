@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../utils/appSlice";
 import { YOUTUBE_SEARCH_API, GOOGLE_API_KEY } from "../utils/contants";
+import {cacheResults} from "../utils/searchSlice";
 
 const Head = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-
+const searchCache = useSelector((store) => store.search);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!searchQuery)  {
-      setSuggestions([]);
-      return;
-    }
-
     const timer = setTimeout(() => {
-      getSearchSuggestions();
-    }, 300);
+if(searchCache[searchQuery]) {
+  setSuggestions(searchCache[searchQuery]);
+}else {
+  getSearchSuggestions();
+}
+    }, 200);
+   
 
     return () => clearTimeout(timer);
   }, [searchQuery]);
@@ -35,6 +36,10 @@ const Head = () => {
     } catch (error) {
       console.error("API Error:", error);
     }
+    //Update cache
+    dispatch(cacheResults({
+      [searchQuery] : json[1]
+    }));
   };
 
   const toggleMenuHandler = () => {
@@ -68,7 +73,7 @@ const Head = () => {
             className="px-3 w-1/2 border border-gray-400 p-2 rounded-l-full"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
- SHOW
+ 
             onFocus={() => setShowSuggestions(true)}
 
             // HIDE 
