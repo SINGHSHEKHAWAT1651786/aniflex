@@ -2,28 +2,37 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../utils/appSlice";
 import { YOUTUBE_SEARCH_API, GOOGLE_API_KEY } from "../utils/contants";
-import {cacheResults} from "../utils/searchSlice";
+import { cacheResults } from "../utils/searchSlice";
 
 const Head = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-const searchCache = useSelector((store) => store.search);
+
+  const searchCache = useSelector((store) => store.search);
   const dispatch = useDispatch();
 
+  // 🔥 Debounce + Cache Logic
   useEffect(() => {
+    if (!searchQuery) {
+      setSuggestions([]);
+      return;
+    }
+
     const timer = setTimeout(() => {
-if(searchCache[searchQuery]) {
-  setSuggestions(searchCache[searchQuery]);
-}else {
-  getSearchSuggestions();
-}
-    }, 200);
-   
+      if (searchCache[searchQuery]) {
+        // ✅ Use cached data
+        setSuggestions(searchCache[searchQuery]);
+      } else {
+        // ✅ Fetch from API
+        getSearchSuggestions();
+      }
+    }, 300);
 
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
+  // 🔥 API Call
   const getSearchSuggestions = async () => {
     try {
       const data = await fetch(
@@ -32,14 +41,20 @@ if(searchCache[searchQuery]) {
 
       const json = await data.json();
 
-      setSuggestions(json?.items || []);
+      const results = json?.items || [];
+
+      // ✅ Update UI
+      setSuggestions(results);
+
+      // ✅ Update Redux Cache
+      dispatch(
+        cacheResults({
+          [searchQuery]: results,
+        })
+      );
     } catch (error) {
       console.error("API Error:", error);
     }
-    //Update cache
-    dispatch(cacheResults({
-      [searchQuery] : json[1]
-    }));
   };
 
   const toggleMenuHandler = () => {
@@ -59,8 +74,8 @@ if(searchCache[searchQuery]) {
         <a href="/">
           <img
             alt="logo"
-            className="w-10 h-8 mx-2"
-            src="/logo192.png"
+            className="w-38 h-10 mx-4"
+            src="/Gemini_Generated_Image_t8dabit8dabit8da.png"
           />
         </a>
       </div>
@@ -73,11 +88,10 @@ if(searchCache[searchQuery]) {
             className="px-3 w-1/2 border border-gray-400 p-2 rounded-l-full"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
- 
             onFocus={() => setShowSuggestions(true)}
 
-            // HIDE 
-            onBlur={() => setShowSuggestions(false)}
+            // ✅ FIX: allow click before hiding
+            onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
 
             placeholder="Search..."
           />
@@ -87,13 +101,13 @@ if(searchCache[searchQuery]) {
           </button>
         </div>
 
-        {/*  Suggestions Dropdown */}
+        {/* 🔥 Suggestions Dropdown */}
         {showSuggestions && suggestions.length > 0 && (
           <div className="absolute bg-white py-2 px-5 w-1/2 shadow-lg rounded-lg">
             <ul>
               {suggestions.map((item) => (
                 <li
-                  key={item?.etag} // ✅ safer unique key
+                  key={item?.etag}
                   className="flex items-center gap-3 py-2 px-2 hover:bg-gray-100 cursor-pointer"
                 >
                   <i className="fa-solid fa-magnifying-glass text-gray-500"></i>
