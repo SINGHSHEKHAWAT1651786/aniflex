@@ -90,7 +90,7 @@ const Head = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
             onFocus={() => setShowSuggestions(true)}
 
-            // ✅ FIX: allow click before hiding
+            // allow click before hiding
             onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
 
             placeholder="Search..."
@@ -101,7 +101,7 @@ const Head = () => {
           </button>
         </div>
 
-        {/* 🔥 Suggestions Dropdown */}
+        {/*  Suggestions Dropdown */}
         {showSuggestions && suggestions.length > 0 && (
           <div className="absolute bg-white py-2 px-5 w-1/2 shadow-lg rounded-lg">
             <ul>
